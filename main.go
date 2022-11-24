@@ -3,6 +3,7 @@ package main
 import (
 	"CloudRestaurant/config"
 	"CloudRestaurant/datasource"
+	"CloudRestaurant/redis"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,11 @@ func main() {
 	//初始化mysql
 	datasource.InitDataSource()
 
+	//初始化redis
+	redis.Init()
+	defer redis.Close()
+
+	//监听端口
 	server := config.Conf.Server
-	r.Run(server.HttpPort)
+	r.Run(":" + server.HttpPort)
 }

@@ -28,11 +28,13 @@ type DataSourceConfig struct {
 
 type RedisConfig struct {
 	Host        string `mapstructure:"host"`
+	Port        string `yaml:"port"`
 	Password    string `mapstructure:"password"`
 	DB          int    `mapstructure:"db"`
 	MaxIdle     int    `mapstructure:"max_idle"`
 	MaxActive   int    `mapstructure:"max_active"`
 	IdleTimeout int    `mapstructure:"idle_timeout"`
+	PoolSize    int    `mapstructure:"pool_size"`
 }
 
 type Server struct {
