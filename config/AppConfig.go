@@ -20,7 +20,7 @@ type DataSourceConfig struct {
 	Host           string `mapstructure:"host"`
 	User           string `mapstructure:"user"`
 	Password       string `mapstructure:"password"`
-	DB             string `mapstructure:"dbname"`
+	DB             string `mapstructure:"db_name"`
 	Port           int    `mapstructure:"port"`
 	MaxOpenConnect int    `mapstructure:"max_open_connect"`
 	MaxIdleConnect int    `mapstructure:"max_idle_connect"`
@@ -36,16 +36,15 @@ type RedisConfig struct {
 }
 
 type Server struct {
-	RunMode      string `mapstructure:"run-mode"`
 	HttpPort     string `mapstructure:"http-port"`
 	ReadTimeout  int    `mapstructure:"read-timeout"`
 	WriteTimeout int    `mapstructure:"write-timeout"`
 }
 
-var _cfg *AppConfig = nil
+var Conf *AppConfig = nil
 
 func InitConfigFile() {
-	gin.SetMode("debug")
+	gin.SetMode(gin.DebugMode)
 
 	v := viper.New()
 	v.SetConfigType("yml")
@@ -75,9 +74,9 @@ func InitConfigFile() {
 
 func BindConfig(v *viper.Viper) {
 	//绑定配置文件中的所有配置项
-	if err := v.Unmarshal(&_cfg); err != nil {
+	if err := v.Unmarshal(&Conf); err != nil {
 		panic(fmt.Errorf("绑定配置文件失败：%s \n", err))
 	} else {
-		log.Println("绑定配置文件成功！", *_cfg)
+		log.Println("绑定配置文件成功！", *Conf)
 	}
 }
