@@ -2,8 +2,8 @@ package main
 
 import (
 	"CloudRestaurant/config"
-	"CloudRestaurant/datasource"
-	"CloudRestaurant/redis"
+	"CloudRestaurant/config/datasource"
+	"CloudRestaurant/config/redis"
 	"github.com/gin-gonic/gin"
 )
 
