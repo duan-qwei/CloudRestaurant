@@ -1,0 +1,25 @@
+server:
+  run-mode: 'debug'
+  http-port: 8000
+  read-timeout: 60
+  write-timeout: 60
+app:
+  app_name: cloudRestaurant
+
+database:
+  driver_name: "mysql"
+  user: 'root'
+  password: '123456'
+  host: '127.0.0.1:3306'
+  name: 'cloud_restaurant'
+  table_prefix: 'c_'
+  max_open_connect: 200
+  max_idle_connect: 50
+
+redis:
+  host: '127.0.0.1:6379'
+  db: 1
+  password:
+  max_idle: 30
+  max_active: 30
+  idle_timeout: 200

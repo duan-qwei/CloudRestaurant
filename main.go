@@ -1,17 +1,13 @@
 package main
 
 import (
-	"CloudRestaurant/tool"
+	"CloudRestaurant/config"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
-
-	config, err := tool.ParseConfig("./config/app.json")
-	if err != nil {
-		panic(err.Error())
-	}
 	r := gin.Default()
-
-	r.Run(config.AppHost + ":" + config.AppPort)
+	//读取并解析配置文件
+	config.InitConfigFile()
+	r.Run()
 }

@@ -1,0 +1,83 @@
+package config
+
+import (
+	"fmt"
+	"github.com/fsnotify/fsnotify"
+	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
+	"log"
+)
+
+type AppConfig struct {
+	AppName          string `mapstructure:"app_name"`
+	Server           `mapstructure:"server"`
+	DataSourceConfig `mapstructure:"database"`
+	RedisConfig      `mapstructure:"redis"`
+}
+
+type DataSourceConfig struct {
+	DriverName     string `mapstructure:"driver_name"`
+	Host           string `mapstructure:"host"`
+	User           string `mapstructure:"user"`
+	Password       string `mapstructure:"password"`
+	DB             string `mapstructure:"dbname"`
+	Port           int    `mapstructure:"port"`
+	MaxOpenConnect int    `mapstructure:"max_open_connect"`
+	MaxIdleConnect int    `mapstructure:"max_idle_connect"`
+}
+
+type RedisConfig struct {
+	Host        string `mapstructure:"host"`
+	Password    string `mapstructure:"password"`
+	DB          int    `mapstructure:"db"`
+	MaxIdle     int    `mapstructure:"max_idle"`
+	MaxActive   int    `mapstructure:"max_active"`
+	IdleTimeout int    `mapstructure:"idle_timeout"`
+}
+
+type Server struct {
+	RunMode      string `mapstructure:"run-mode"`
+	HttpPort     string `mapstructure:"http-port"`
+	ReadTimeout  int    `mapstructure:"read-timeout"`
+	WriteTimeout int    `mapstructure:"write-timeout"`
+}
+
+var _cfg *AppConfig = nil
+
+func InitConfigFile() {
+	gin.SetMode("debug")
+
+	v := viper.New()
+	v.SetConfigType("yml")
+	v.SetConfigName("config")
+	v.AddConfigPath(".")
+
+	// 读取配置信息
+	err := v.ReadInConfig()
+	if err != nil {
+		log.Printf("viper读取配置信息失败：%v\n", err)
+		panic(err)
+		return
+	}
+
+	//将配置文件反序列化到_config
+	BindConfig(v)
+
+	//监控配置
+	v.WatchConfig()
+
+	//配置文件实时刷新
+	v.OnConfigChange(func(in fsnotify.Event) {
+		log.Println("-------------配置文件修改了-------------")
+		BindConfig(v)
+	})
+}
+
+func BindConfig(v *viper.Viper) {
+	//绑定配置文件中的所有配置项
+	if err := v.Unmarshal(&_cfg); err != nil {
+		panic(fmt.Errorf("绑定配置文件失败：%s \n", err))
+	} else {
+		log.Println("绑定配置文件成功！", *_cfg)
+	}
+}
