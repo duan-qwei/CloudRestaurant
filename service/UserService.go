@@ -2,17 +2,18 @@ package service
 
 import (
 	"CloudRestaurant/common"
-	"CloudRestaurant/vo"
+	"CloudRestaurant/model/request"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 )
 
 type User struct {
-	M *vo.SysUser
+	U *request.UserAddReq
 }
 
-func (u *User) Insert(c *gin.Context) {
+func (u *User) Insert(c *gin.Context, req *request.UserAddReq) {
+
 	err := common.DB.Create(u).Error
 	if err != nil {
 		log.Println("创建用户失败", err)
