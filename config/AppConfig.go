@@ -81,6 +81,6 @@ func BindConfig(v *viper.Viper) {
 	if err := v.Unmarshal(&Conf); err != nil {
 		panic(fmt.Errorf("绑定配置文件失败：%s \n", err))
 	} else {
-		log.Println("绑定配置文件成功！", *Conf)
+		log.Println("-------------绑定配置文件成功-------------")
 	}
 }

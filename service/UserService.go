@@ -2,6 +2,7 @@ package service
 
 import (
 	"CloudRestaurant/common"
+	"CloudRestaurant/model"
 	"CloudRestaurant/model/request"
 	"github.com/gin-gonic/gin"
 	"log"
@@ -13,8 +14,12 @@ type User struct {
 }
 
 func (u *User) Insert(c *gin.Context, req *request.UserAddReq) {
+	user := model.User{
+		Username: req.Username,
+		Password: req.Password,
+	}
 
-	err := common.DB.Create(u).Error
+	err := common.DB.Create(&user).Error
 	if err != nil {
 		log.Println("创建用户失败", err)
 		c.JSON(http.StatusOK, gin.H{

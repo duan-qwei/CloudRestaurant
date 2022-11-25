@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 var DB *gorm.DB
@@ -24,6 +25,11 @@ func InitDataSource() {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		// 禁用外键(指定外键时不会在mysql创建真实的外键约束)
 		DisableForeignKeyConstraintWhenMigrating: true,
+
+		// 使用单数表名
+		NamingStrategy: schema.NamingStrategy{
+			SingularTable: true,
+		},
 	})
 	if err != nil {
 		panic("连接数据库失败")
