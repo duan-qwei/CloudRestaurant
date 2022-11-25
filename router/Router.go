@@ -5,9 +5,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Router(r *gin.Engine) {
+func Router(engine *gin.Engine) {
 	userController := controller.UserController{}
-	adminRouter := r.Group("/user")
+	adminRouter := engine.Group("/user")
 
 	{
 		adminRouter.POST("/add", userController.InsertUser)

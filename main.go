@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	r := gin.Default()
+	engine := gin.Default()
 	//读取并解析配置文件
 	config.InitConfigFile()
 
@@ -19,9 +19,12 @@ func main() {
 	common.Init()
 	defer common.Close()
 
-	router.Router(r)
+	// 初始化Validator数据校验
+	common.InitValidate()
+
+	router.Router(engine)
 
 	//监听端口
 	server := config.Conf.Server
-	r.Run(":" + server.HttpPort)
+	engine.Run(":" + server.HttpPort)
 }
