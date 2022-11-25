@@ -1,10 +1,10 @@
 package main
 
 import (
+	"CloudRestaurant/common"
 	"CloudRestaurant/config"
-	"CloudRestaurant/config/datasource"
-	"CloudRestaurant/config/redis"
-	"github.com/gin-gonic/gin"
+	"CloudRestaurant/router"
+	gin "github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -13,11 +13,13 @@ func main() {
 	config.InitConfigFile()
 
 	//初始化mysql
-	datasource.InitDataSource()
+	common.InitDataSource()
 
 	//初始化redis
-	redis.Init()
-	defer redis.Close()
+	common.Init()
+	defer common.Close()
+
+	router.Router(r)
 
 	//监听端口
 	server := config.Conf.Server

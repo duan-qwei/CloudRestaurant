@@ -21,9 +21,13 @@ type DataSourceConfig struct {
 	User           string `mapstructure:"user"`
 	Password       string `mapstructure:"password"`
 	DB             string `mapstructure:"db_name"`
+	LogMode        bool   `mapstructure:"log-mode"`
 	Port           int    `mapstructure:"port"`
 	MaxOpenConnect int    `mapstructure:"max_open_connect"`
 	MaxIdleConnect int    `mapstructure:"max_idle_connect"`
+	Charset        string `mapstructure:"charset"`
+	Collation      string `mapstructure:"collation"`
+	Query          string `mapstructure:"query"`
 }
 
 type RedisConfig struct {

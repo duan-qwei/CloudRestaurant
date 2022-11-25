@@ -12,6 +12,14 @@ database:
   host: '127.0.0.1'
   port: '3306'
   db_name: 'cloud_restaurant'
+  # 是否打印日志
+  log-mode: true
+  # 编码方式
+  charset: utf8mb4
+  # 字符集(utf8mb4_general_ci速度比utf8mb4_unicode_ci快些)
+  collation: utf8mb4_general_ci
+  # 连接字符串参数
+  query: parseTime=True&loc=Local&timeout=10000ms
   table_prefix: 'c_'
   max_open_connect: 200
   max_idle_connect: 50

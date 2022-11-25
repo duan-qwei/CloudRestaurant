@@ -3,15 +3,16 @@ package controller
 import (
 	"CloudRestaurant/app"
 	"CloudRestaurant/res"
+	"CloudRestaurant/service"
 	"CloudRestaurant/vo"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-type userController struct {
+type UserController struct {
 }
 
-func (e *userController) insertUser(c *gin.Context) {
+func (e *UserController) InsertUser(c *gin.Context) {
 	var (
 		model vo.SysUser
 		appG  = res.Gin{C: c}
@@ -24,8 +25,10 @@ func (e *userController) insertUser(c *gin.Context) {
 		return
 	}
 
-	//userService := service.User{
-	//	M: &model,
-	//}
+	userService := service.User{
+		M: &model,
+	}
+
+	userService.Insert(c)
 
 }
