@@ -3,7 +3,6 @@ package config
 import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
-	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	"log"
 )
@@ -43,6 +42,7 @@ type RedisConfig struct {
 
 type Server struct {
 	HttpPort     string `mapstructure:"http-port"`
+	RunMode      string `mapstructure:"run-mode"`
 	ReadTimeout  int    `mapstructure:"read-timeout"`
 	WriteTimeout int    `mapstructure:"write-timeout"`
 }
@@ -50,8 +50,6 @@ type Server struct {
 var Conf *AppConfig = nil
 
 func InitConfigFile() {
-	gin.SetMode(gin.DebugMode)
-
 	v := viper.New()
 	v.SetConfigType("yml")
 	v.SetConfigName("config")
