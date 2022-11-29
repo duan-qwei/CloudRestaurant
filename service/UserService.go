@@ -5,15 +5,14 @@ import (
 	"CloudRestaurant/model"
 	"CloudRestaurant/model/request"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 )
 
-type User struct {
+type UserReq struct {
 	U *request.UserAddReq
 }
 
-func (u *User) Insert(c *gin.Context, req *request.UserAddReq) {
+func (u *UserReq) Insert(c *gin.Context, req *request.UserAddReq) {
 	user := model.User{
 		Username: req.Username,
 		Password: req.Password,
@@ -21,7 +20,6 @@ func (u *User) Insert(c *gin.Context, req *request.UserAddReq) {
 
 	err := common.DB.Create(&user).Error
 	if err != nil {
-		log.Println("创建用户失败", err)
 		c.JSON(http.StatusOK, gin.H{
 			"code":  http.StatusInternalServerError,
 			"msg":   "创建用户失败",
@@ -34,4 +32,17 @@ func (u *User) Insert(c *gin.Context, req *request.UserAddReq) {
 		"code": http.StatusOK,
 		"msg":  "创建用户成功",
 	})
+}
+
+func (u *UserReq) SelectUserById(c *gin.Context, userId int64) (data interface{}) {
+	var (
+		result model.User
+	)
+	common.DB.First(&result, userId)
+	//c.JSON(http.StatusOK, gin.H{
+	//	"code": http.StatusOK,
+	//	"msg":  "查询用户成功",
+	//	"data": res,
+	//})
+	return result
 }

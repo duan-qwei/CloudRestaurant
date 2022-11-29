@@ -13,5 +13,6 @@ func Router(engine *gin.Engine) {
 
 	{
 		adminRouter.POST("/add", userController.InsertUser)
+		adminRouter.GET("/:id", userController.GetUerInfoById)
 	}
 }

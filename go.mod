@@ -10,6 +10,7 @@ require (
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/go-redis/redis v6.14.2+incompatible
 	github.com/spf13/viper v1.14.0
+	github.com/unknwon/com v1.0.1
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.0
 	gorm.io/plugin/soft_delete v1.2.0
