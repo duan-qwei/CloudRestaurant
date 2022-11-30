@@ -34,15 +34,10 @@ func (u *UserReq) Insert(c *gin.Context, req *request.UserAddReq) {
 	})
 }
 
-func (u *UserReq) SelectUserById(c *gin.Context, userId int64) (data interface{}) {
+func (u *UserReq) SelectUserById(userId int64) (data interface{}) {
 	var (
 		result model.User
 	)
 	common.DB.First(&result, userId)
-	//c.JSON(http.StatusOK, gin.H{
-	//	"code": http.StatusOK,
-	//	"msg":  "查询用户成功",
-	//	"data": res,
-	//})
 	return result
 }
