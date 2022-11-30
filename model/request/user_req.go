@@ -6,5 +6,5 @@ type UserAddReq struct {
 }
 
 type UserQueryInfoReq struct {
-	Id int64 `uri:"id" binding:"required"`
+	Id int64 `form:"id" binding:"required"`
 }

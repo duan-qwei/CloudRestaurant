@@ -6,7 +6,6 @@ import (
 	"CloudRestaurant/model/request"
 	"CloudRestaurant/service"
 	"github.com/gin-gonic/gin"
-	"github.com/unknwon/com"
 	"net/http"
 )
 
@@ -34,17 +33,18 @@ func (userController *UserController) InsertUser(c *gin.Context) {
 
 // GetUerInfoById 根据id获取用户详情
 func (userController *UserController) GetUerInfoById(c *gin.Context) {
-	userId := c.Query("id")
-	if userId == "" {
+	var req request.UserQueryInfoReq
+	err := c.ShouldBindQuery(&req)
+	if err != nil {
 		c.JSON(http.StatusOK, reponse.Response{
-			Code:    http.StatusBadRequest,
-			Message: constant.UserIdIsBLANK,
+			Code:    http.StatusOK,
+			Message: "绑定数据失败",
+			Data:    err.Error(),
 		})
 		return
 	}
-	id := com.StrTo(userId).MustInt64()
-	data := userService.SelectUserById(id)
 
+	data := userService.SelectUserById(req.Id)
 	c.JSON(http.StatusOK, reponse.Response{
 		Code:    http.StatusOK,
 		Message: constant.SUCCESS,
