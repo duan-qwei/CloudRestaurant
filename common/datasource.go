@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 )
 
@@ -26,6 +27,9 @@ func InitDataSource() {
 		// 禁用外键(指定外键时不会在mysql创建真实的外键约束)
 		DisableForeignKeyConstraintWhenMigrating: true,
 
+		//设置sql日志级别为Info
+		Logger: logger.Default.LogMode(logger.Info),
+
 		// 使用单数表名
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
@@ -33,11 +37,6 @@ func InitDataSource() {
 	})
 	if err != nil {
 		panic("连接数据库失败")
-	}
-
-	// 开启mysql日志
-	if sourceConfig.LogMode {
-		db.Debug()
 	}
 
 	DB = db
