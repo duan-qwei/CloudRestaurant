@@ -6,6 +6,7 @@ import (
 	"CloudRestaurant/model/request"
 	"CloudRestaurant/service"
 	"github.com/gin-gonic/gin"
+	"github.com/unknwon/com"
 	"net/http"
 )
 
@@ -20,11 +21,7 @@ func (userController *UserController) InsertUser(c *gin.Context) {
 	err := c.ShouldBindJSON(&addUser)
 
 	if err != nil {
-		c.JSON(http.StatusOK, reponse.Response{
-			Code:    http.StatusOK,
-			Message: constant.BindDataError,
-			Data:    err.Error(),
-		})
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.BindDataError, err.Error())
 		return
 	}
 
@@ -51,4 +48,16 @@ func (userController *UserController) GetUerInfoById(c *gin.Context) {
 		Data:    data,
 	})
 	return
+}
+
+// DeleteUserById 根据用户id删除
+func (userController *UserController) DeleteUserById(c *gin.Context) {
+	paramId := c.Param("id")
+	if paramId == "" {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.ArgsIsBlank)
+		return
+	}
+
+	userId := com.StrTo(paramId).MustInt64()
+	userService.DeleteById(c, userId)
 }

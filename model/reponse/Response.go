@@ -23,9 +23,32 @@ type ResponsePage struct {
 	TotalPage int         `json:"totalPage"`
 }
 
-func (g *Gin) ResponsePage(httpCode int, errCode interface{}, data interface{}, total, totalPage int) {
+func ResponseErrorReturn(g *gin.Context, httCode, errorCode int, message string, error interface{}) {
+	g.JSON(httCode, Response{
+		Code:    errorCode,
+		Message: message,
+		Error:   error,
+	})
+}
+
+func ResponseMessageReturn(g *gin.Context, httCode, errorCode int, message string) {
+	g.JSON(httCode, Response{
+		Code:    errorCode,
+		Message: message,
+	})
+}
+
+func ResponseReturn(g *gin.Context, httCode, errorCode int, message string, data, error interface{}) {
+	g.JSON(httCode, Response{
+		Code:    errorCode,
+		Message: message,
+		Data:    data,
+		Error:   error,
+	})
+}
+func (c *Gin) ResponsePage(httpCode int, errCode interface{}, data interface{}, total, totalPage int) {
 	intCode := errCode.(int)
-	g.C.JSON(httpCode, ResponsePage{
+	c.C.JSON(httpCode, ResponsePage{
 		Code:      intCode,
 		Message:   "",
 		Data:      data,

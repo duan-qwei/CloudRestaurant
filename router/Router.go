@@ -13,6 +13,7 @@ func Router(engine *gin.Engine) {
 
 	{
 		adminRouter.POST("/add", userController.InsertUser)
+		adminRouter.DELETE("/delete/:id", userController.DeleteUserById)
 		adminRouter.GET("/getInfo", userController.GetUerInfoById)
 	}
 }

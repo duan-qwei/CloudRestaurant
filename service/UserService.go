@@ -20,20 +20,19 @@ func (u *UserReq) Insert(c *gin.Context, req *request.UserAddReq) {
 		Password: req.Password,
 	}
 
+	checkName := common.DB.Where("name=?", user.Username).Find(&user)
+
+	if checkName != nil {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.UserNameRepeat)
+		return
+	}
 	err := common.DB.Create(&user).Error
 	if err != nil {
-		c.JSON(http.StatusOK, reponse.Response{
-			Code:    http.StatusOK,
-			Message: constant.ERROR,
-			Error:   err.Error(),
-		})
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.ERROR, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, reponse.Response{
-		Code:    http.StatusOK,
-		Message: constant.SUCCESS,
-	})
+	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
 	return
 }
 
@@ -43,4 +42,15 @@ func (u *UserReq) SelectUserById(userId int64) (data interface{}) {
 	)
 	common.DB.First(&result, userId)
 	return result
+}
+
+func (u *UserReq) DeleteById(c *gin.Context, userId int64) {
+	user := model.User{Id: userId}
+	err := common.DB.Delete(&user).Error
+	if err != nil {
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.ERROR, err.Error())
+		return
+	}
+	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
+	return
 }
