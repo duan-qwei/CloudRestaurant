@@ -20,10 +20,10 @@ func (userController *UserController) InsertUser(c *gin.Context) {
 	err := c.ShouldBindJSON(&addUser)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, reponse.Response{
-			Code:    http.StatusInternalServerError,
-			Message: "绑定错误",
-			Data:    nil,
+		c.JSON(http.StatusOK, reponse.Response{
+			Code:    http.StatusOK,
+			Message: constant.BindDataError,
+			Data:    err.Error(),
 		})
 		return
 	}
@@ -38,7 +38,7 @@ func (userController *UserController) GetUerInfoById(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, reponse.Response{
 			Code:    http.StatusOK,
-			Message: "绑定数据失败",
+			Message: constant.BindDataError,
 			Data:    err.Error(),
 		})
 		return

@@ -1,9 +1,8 @@
 package constant
 
 const (
-	SUCCESS       = "操作成功"
-	ERROR         = "操作失败"
-	InvalidParams = 400
+	SUCCESS = "操作成功!"
+	ERROR   = "操作失败!"
 
-	UserIdIsBLANK = "参数userId为空！"
+	BindDataError = "绑定数据失败！"
 )

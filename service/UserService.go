@@ -2,7 +2,9 @@ package service
 
 import (
 	"CloudRestaurant/common"
+	"CloudRestaurant/constant"
 	"CloudRestaurant/model"
+	"CloudRestaurant/model/reponse"
 	"CloudRestaurant/model/request"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -20,18 +22,19 @@ func (u *UserReq) Insert(c *gin.Context, req *request.UserAddReq) {
 
 	err := common.DB.Create(&user).Error
 	if err != nil {
-		c.JSON(http.StatusOK, gin.H{
-			"code":  http.StatusInternalServerError,
-			"msg":   "创建用户失败",
-			"error": err.Error(),
+		c.JSON(http.StatusOK, reponse.Response{
+			Code:    http.StatusOK,
+			Message: constant.ERROR,
+			Error:   err.Error(),
 		})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"code": http.StatusOK,
-		"msg":  "创建用户成功",
+	c.JSON(http.StatusOK, reponse.Response{
+		Code:    http.StatusOK,
+		Message: constant.SUCCESS,
 	})
+	return
 }
 
 func (u *UserReq) SelectUserById(userId int64) (data interface{}) {
