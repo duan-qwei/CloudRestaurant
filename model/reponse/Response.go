@@ -38,12 +38,11 @@ func ResponseMessageReturn(g *gin.Context, httCode, errorCode int, message strin
 	})
 }
 
-func ResponseReturn(g *gin.Context, httCode, errorCode int, message string, data, error interface{}) {
+func ResponseReturn(g *gin.Context, httCode, errorCode int, message string, data interface{}) {
 	g.JSON(httCode, Response{
 		Code:    errorCode,
 		Message: message,
 		Data:    data,
-		Error:   error,
 	})
 }
 func (c *Gin) ResponsePage(httpCode int, errCode interface{}, data interface{}, total, totalPage int) {

@@ -8,3 +8,10 @@ type UserAddReq struct {
 type UserQueryInfoReq struct {
 	Id int64 `form:"id" binding:"required"`
 }
+
+type UserUpdateReq struct {
+	Id          int64  `json:"id" binding:"required"`
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	NewPassword string `json:"newPassword"`
+}

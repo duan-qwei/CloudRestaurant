@@ -7,6 +7,7 @@ import (
 	"CloudRestaurant/model/reponse"
 	"CloudRestaurant/model/request"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -51,6 +52,29 @@ func (u *UserReq) DeleteById(c *gin.Context, userId int64) {
 		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.ERROR, err.Error())
 		return
 	}
+	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
+	return
+}
+
+func (u *UserReq) Update(c *gin.Context, req request.UserUpdateReq) {
+	user := model.User{
+		Id: req.Id,
+	}
+	selectOne := common.DB.Find(&user)
+	if selectOne.Error != nil {
+		log.Println(selectOne.Error.Error())
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.ERROR)
+		return
+	}
+
+	if selectOne.RowsAffected == 0 {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.DataIsNull)
+		return
+	}
+
+	user.Password = req.NewPassword
+	user.Username = req.Username
+	common.DB.Save(&user)
 	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
 	return
 }

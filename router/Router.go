@@ -14,6 +14,7 @@ func Router(engine *gin.Engine) {
 	{
 		adminRouter.POST("/add", userController.InsertUser)
 		adminRouter.DELETE("/delete/:id", userController.DeleteUserById)
+		adminRouter.POST("/update", userController.Update)
 		adminRouter.GET("/getInfo", userController.GetUerInfoById)
 	}
 }

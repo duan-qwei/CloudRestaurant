@@ -33,20 +33,12 @@ func (userController *UserController) GetUerInfoById(c *gin.Context) {
 	var req request.UserQueryInfoReq
 	err := c.ShouldBindQuery(&req)
 	if err != nil {
-		c.JSON(http.StatusOK, reponse.Response{
-			Code:    http.StatusOK,
-			Message: constant.BindDataError,
-			Data:    err.Error(),
-		})
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusBadRequest, constant.BindDataError, err.Error())
 		return
 	}
 
 	data := userService.SelectUserById(req.Id)
-	c.JSON(http.StatusOK, reponse.Response{
-		Code:    http.StatusOK,
-		Message: constant.SUCCESS,
-		Data:    data,
-	})
+	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, data)
 	return
 }
 
@@ -60,4 +52,15 @@ func (userController *UserController) DeleteUserById(c *gin.Context) {
 
 	userId := com.StrTo(paramId).MustInt64()
 	userService.DeleteById(c, userId)
+}
+
+// Update 更新用户
+func (userController *UserController) Update(c *gin.Context) {
+	var req request.UserUpdateReq
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusBadRequest, constant.BindArgsError, err.Error())
+		return
+	}
+	userService.Update(c, req)
 }
