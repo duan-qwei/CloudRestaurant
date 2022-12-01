@@ -8,9 +8,12 @@ import (
 
 func Router(engine *gin.Engine) {
 	gin.SetMode(config.Conf.Server.RunMode)
-	userController := controller.UserController{}
-	adminRouter := engine.Group("/user")
 
+	var (
+		userController = controller.UserController{}
+	)
+
+	adminRouter := engine.Group("/user")
 	{
 		adminRouter.POST("/add", userController.InsertUser)
 		adminRouter.DELETE("/delete/:id", userController.DeleteUserById)

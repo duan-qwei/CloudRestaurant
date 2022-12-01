@@ -46,10 +46,9 @@ func (u *UserReq) SelectUserById(userId int64) (data interface{}) {
 }
 
 func (u *UserReq) DeleteById(c *gin.Context, userId int64) {
-	user := model.User{Id: userId}
-	err := common.DB.Delete(&user).Error
-	if err != nil {
-		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.ERROR, err.Error())
+	err := common.DB.Delete(&model.User{}, userId)
+	if err.Error != nil {
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.ERROR, err.Error)
 		return
 	}
 	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
@@ -57,10 +56,9 @@ func (u *UserReq) DeleteById(c *gin.Context, userId int64) {
 }
 
 func (u *UserReq) Update(c *gin.Context, req request.UserUpdateReq) {
-	user := model.User{
-		Id: req.Id,
-	}
-	selectOne := common.DB.Find(&user)
+	var user model.User
+	selectOne := common.DB.First(&user, req.Id)
+	//selectOne := common.DB.Find(&user)
 	if selectOne.Error != nil {
 		log.Println(selectOne.Error.Error())
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.ERROR)
