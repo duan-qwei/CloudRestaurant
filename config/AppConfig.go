@@ -12,6 +12,7 @@ type AppConfig struct {
 	Server           `mapstructure:"server"`
 	DataSourceConfig `mapstructure:"database"`
 	RedisConfig      `mapstructure:"redis"`
+	SnowConfig       `mapstructure:"snow"`
 }
 
 type DataSourceConfig struct {
@@ -44,6 +45,10 @@ type Server struct {
 	RunMode      string `mapstructure:"run-mode"`
 	ReadTimeout  int    `mapstructure:"read-timeout"`
 	WriteTimeout int    `mapstructure:"write-timeout"`
+}
+
+type SnowConfig struct {
+	WorkId int `mapstructure:"workId"`
 }
 
 var Conf *AppConfig = nil

@@ -12,9 +12,9 @@ require (
 	github.com/go-redis/redis v6.14.2+incompatible
 	github.com/spf13/viper v1.14.0
 	github.com/unknwon/com v1.0.1
+	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e
 	gorm.io/driver/mysql v1.4.4
 	gorm.io/gorm v1.24.0
-	gorm.io/plugin/soft_delete v1.2.0
 )
 
 require (
@@ -41,7 +41,6 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.4.1 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
-	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
 	golang.org/x/net v0.0.0-20221014081412-f15817d10f9b // indirect
 	golang.org/x/sys v0.0.0-20220908164124-27713097b956 // indirect
 	golang.org/x/text v0.4.0 // indirect

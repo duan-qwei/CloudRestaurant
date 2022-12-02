@@ -14,6 +14,7 @@ func Router(engine *gin.Engine) {
 		userController       = controller.UserController{}
 	)
 
+	//用户管理
 	adminRouter := engine.Group("/user/manage")
 	{
 		adminRouter.POST("/add", userManageController.InsertUser)
@@ -22,6 +23,7 @@ func Router(engine *gin.Engine) {
 		adminRouter.GET("/getInfo", userManageController.GetUerInfoById)
 	}
 
+	//用户前台
 	userRouter := engine.Group("/user/interface")
 	{
 		userRouter.POST("/register", userController.Register)

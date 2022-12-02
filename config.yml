@@ -19,7 +19,6 @@ database:
   collation: utf8mb4_general_ci
   # 连接字符串参数
   query: parseTime=True&loc=Local&timeout=10000ms
-  table_prefix: 'c_'
   max_open_connect: 200
   max_idle_connect: 50
 
@@ -32,3 +31,7 @@ redis:
   max_active: 30
   idle_timeout: 200
   pool_size: 100
+
+#雪花算法
+snow:
+  workId: 1

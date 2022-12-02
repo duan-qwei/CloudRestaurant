@@ -2,6 +2,7 @@ package service
 
 import (
 	"CloudRestaurant/common"
+	"CloudRestaurant/config"
 	"CloudRestaurant/constant"
 	"CloudRestaurant/model"
 	"CloudRestaurant/model/reponse"
@@ -11,6 +12,8 @@ import (
 	"log"
 	"net/http"
 )
+
+var appConfig config.AppConfig
 
 type UserReq struct {
 	U *request.UserAddReq
@@ -102,6 +105,9 @@ func (u *UserReq) Register(c *gin.Context, register *request.UserRegister) {
 	//加密处理
 	hash, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	user.Password = string(hash)
+
+	worker, _ := common.NewWorker(int64(config.Conf.WorkId))
+	user.Id = worker.GetId()
 	save := common.DB.Save(&user)
 	if err := save.Error; err != nil {
 		log.Println(err.Error())
