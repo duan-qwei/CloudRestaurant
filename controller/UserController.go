@@ -12,6 +12,7 @@ import (
 type UserController struct {
 }
 
+// Register 注册用户
 func (userController *UserController) Register(c *gin.Context) {
 	var req request.UserRegister
 	err := c.ShouldBindJSON(&req)

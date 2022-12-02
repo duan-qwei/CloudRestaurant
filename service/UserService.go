@@ -7,6 +7,7 @@ import (
 	"CloudRestaurant/model/reponse"
 	"CloudRestaurant/model/request"
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 	"log"
 	"net/http"
 )
@@ -82,7 +83,6 @@ func (u *UserReq) Update(c *gin.Context, req request.UserUpdateReq) {
 
 func (u *UserReq) Register(c *gin.Context, register *request.UserRegister) {
 	user := model.User{
-		Password: register.Password,
 		Username: register.Username,
 		Phone:    register.Phone,
 	}
@@ -99,6 +99,9 @@ func (u *UserReq) Register(c *gin.Context, register *request.UserRegister) {
 		return
 	}
 
+	//加密处理
+	hash, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	user.Password = string(hash)
 	save := common.DB.Save(&user)
 	if err := save.Error; err != nil {
 		log.Println(err.Error())
