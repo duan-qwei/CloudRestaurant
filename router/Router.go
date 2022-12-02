@@ -10,14 +10,21 @@ func Router(engine *gin.Engine) {
 	gin.SetMode(config.Conf.Server.RunMode)
 
 	var (
-		userController = controller.UserController{}
+		userManageController = controller.UserManagerController{}
+		userController       = controller.UserController{}
 	)
 
-	adminRouter := engine.Group("/user")
+	adminRouter := engine.Group("/user/manage")
 	{
-		adminRouter.POST("/add", userController.InsertUser)
-		adminRouter.DELETE("/delete/:id", userController.DeleteUserById)
-		adminRouter.POST("/update", userController.Update)
-		adminRouter.GET("/getInfo", userController.GetUerInfoById)
+		adminRouter.POST("/add", userManageController.InsertUser)
+		adminRouter.DELETE("/delete/:id", userManageController.DeleteUserById)
+		adminRouter.POST("/update", userManageController.Update)
+		adminRouter.GET("/getInfo", userManageController.GetUerInfoById)
+	}
+
+	userRouter := engine.Group("/user/interface")
+	{
+		userRouter.POST("/register", userController.Register)
+		userRouter.POST("/login")
 	}
 }
