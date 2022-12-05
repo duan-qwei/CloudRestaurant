@@ -37,3 +37,7 @@ func (userController *UserController) Login(c *gin.Context) {
 
 	userService.Login(c, req)
 }
+
+func (userController *UserController) updateInfoByUser() {
+
+}

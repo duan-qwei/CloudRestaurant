@@ -93,13 +93,13 @@ func (u *UserReq) Register(c *gin.Context, register *request.UserRegisterAndLogi
 	}
 
 	//加密处理
-	hash, _ := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	hash, _ := bcrypt.GenerateFromPassword([]byte(register.Password), bcrypt.DefaultCost)
 	user.Password = string(hash)
 
 	worker, _ := common.NewWorker(int64(config.Conf.WorkId))
 	user.Username = register.Username
 	user.Id = worker.GetId()
-	save := common.DB.Save(&user)
+	save := common.DB.Create(&user)
 	if err := save.Error; err != nil {
 		log.Println(err.Error())
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusInternalServerError, constant.ERROR)

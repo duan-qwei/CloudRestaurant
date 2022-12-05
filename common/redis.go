@@ -8,20 +8,20 @@ import (
 )
 
 var (
-	client *redis.Client
-	Nil    = redis.Nil
+	RedisClient *redis.Client
+	Nil         = redis.Nil
 )
 
 // Init 初始化连接
 func Init() {
-	client = redis.NewClient(&redis.Options{
+	RedisClient = redis.NewClient(&redis.Options{
 		Addr:     fmt.Sprintf("%s:%s", config.Conf.RedisConfig.Host, config.Conf.RedisConfig.Port),
 		Password: config.Conf.RedisConfig.Password,
 		DB:       config.Conf.RedisConfig.DB,
 		PoolSize: config.Conf.RedisConfig.PoolSize,
 	})
 
-	_, err := client.Ping().Result()
+	_, err := RedisClient.Ping().Result()
 
 	if err != nil {
 		panic(err)
@@ -31,5 +31,5 @@ func Init() {
 }
 
 func Close() {
-	_ = client.Close()
+	_ = RedisClient.Close()
 }
