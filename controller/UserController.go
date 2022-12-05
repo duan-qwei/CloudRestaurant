@@ -14,7 +14,7 @@ type UserController struct {
 
 // Register 注册用户
 func (userController *UserController) Register(c *gin.Context) {
-	var req request.UserRegister
+	var req request.UserRegisterAndLogin
 	err := c.ShouldBindJSON(&req)
 	if err != nil {
 		log.Println(err.Error())
@@ -25,7 +25,15 @@ func (userController *UserController) Register(c *gin.Context) {
 	userService.Register(c, &req)
 }
 
-func login(userController *UserController) (c *gin.Context) {
+// Login 用户登陆
+func (userController *UserController) Login(c *gin.Context) {
+	var req request.UserRegisterAndLogin
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		log.Println(err.Error())
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusBadRequest, constant.BindArgsError, err.Error())
+		return
+	}
 
-	return nil
+	userService.Login(c, req)
 }

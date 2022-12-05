@@ -10,6 +10,6 @@ const (
 	BindArgsError      = "绑定参数异常！"
 	DataIsNull         = "当前数据不存在！"
 	DataExist          = "当前数据已存在！"
-	PasswordIsNotRight = "原密码错误！"
+	PasswordIsNotRight = "密码错误！"
 	SqlError           = "数据库操作异常！"
 )

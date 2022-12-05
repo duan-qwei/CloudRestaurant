@@ -16,8 +16,7 @@ type UserUpdateReq struct {
 	NewPassword string `json:"newPassword"`
 }
 
-type UserRegister struct {
+type UserRegisterAndLogin struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
-	Phone    string `json:"phone" binding:"required"`
 }

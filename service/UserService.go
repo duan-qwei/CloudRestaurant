@@ -9,6 +9,7 @@ import (
 	"CloudRestaurant/model/request"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 	"log"
 	"net/http"
 )
@@ -84,20 +85,9 @@ func (u *UserReq) Update(c *gin.Context, req request.UserUpdateReq) {
 	return
 }
 
-func (u *UserReq) Register(c *gin.Context, register *request.UserRegister) {
-	user := model.User{
-		Username: register.Username,
-		Phone:    register.Phone,
-	}
-
-	selectOne := common.DB.Where("username = ? OR phone = ?", user.Username, user.Phone).Find(&user)
-	if error := selectOne.Error; error != nil {
-		log.Println(error.Error())
-		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusInternalServerError, constant.SqlError)
-		return
-	}
-
-	if selectOne.RowsAffected > 0 {
+func (u *UserReq) Register(c *gin.Context, register *request.UserRegisterAndLogin) {
+	db, user := getOneByUsername(c, register.Username)
+	if db.RowsAffected > 0 {
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.DataExist)
 		return
 	}
@@ -107,6 +97,7 @@ func (u *UserReq) Register(c *gin.Context, register *request.UserRegister) {
 	user.Password = string(hash)
 
 	worker, _ := common.NewWorker(int64(config.Conf.WorkId))
+	user.Username = register.Username
 	user.Id = worker.GetId()
 	save := common.DB.Save(&user)
 	if err := save.Error; err != nil {
@@ -117,4 +108,34 @@ func (u *UserReq) Register(c *gin.Context, register *request.UserRegister) {
 
 	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
 	return
+}
+
+func (u *UserReq) Login(c *gin.Context, req request.UserRegisterAndLogin) {
+	db, user := getOneByUsername(c, req.Username)
+	if db.RowsAffected == 0 {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.DataIsNull)
+		return
+	}
+
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
+	if err != nil {
+		log.Println(err.Error())
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.PasswordIsNotRight)
+		return
+	}
+
+	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, &user)
+	return
+}
+
+// getOneByUsername 根据用户名获取用户
+func getOneByUsername(c *gin.Context, username string) (db *gorm.DB, u *model.User) {
+	var user *model.User
+	db = common.DB.Where("username = ?", username).Find(&user)
+	if error := db.Error; error != nil {
+		log.Println(error.Error())
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusInternalServerError, constant.SqlError)
+		return
+	}
+	return db, user
 }

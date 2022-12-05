@@ -27,6 +27,6 @@ func Router(engine *gin.Engine) {
 	userRouter := engine.Group("/user/interface")
 	{
 		userRouter.POST("/register", userController.Register)
-		userRouter.POST("/login")
+		userRouter.POST("/login", userController.Login)
 	}
 }
