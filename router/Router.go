@@ -12,6 +12,7 @@ func Router(engine *gin.Engine) {
 	var (
 		userManageController = controller.UserManagerController{}
 		userController       = controller.UserController{}
+		roleController       = controller.RoleController{}
 	)
 
 	//用户管理
@@ -29,5 +30,12 @@ func Router(engine *gin.Engine) {
 		userRouter.POST("/register", userController.Register)
 		userRouter.POST("/login", userController.Login)
 		userRouter.POST("/updateInfo", userController.UpdateInfoByUser)
+	}
+
+	//角色
+	roleRouter := engine.Group("/role")
+	{
+		roleRouter.POST("/add", roleController.Add)
+		roleRouter.POST("/update", roleController.Update)
 	}
 }

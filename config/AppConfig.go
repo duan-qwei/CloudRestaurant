@@ -48,7 +48,7 @@ type Server struct {
 }
 
 type SnowConfig struct {
-	WorkId int `mapstructure:"workId"`
+	WorkId int64 `mapstructure:"workId"`
 }
 
 var Conf *AppConfig = nil

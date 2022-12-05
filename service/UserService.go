@@ -95,7 +95,7 @@ func (u *UserReq) Register(c *gin.Context, register *request.UserRegisterAndLogi
 	hash, _ := bcrypt.GenerateFromPassword([]byte(register.Password), bcrypt.DefaultCost)
 	user.Password = string(hash)
 
-	worker, _ := common.NewWorker(int64(config.Conf.WorkId))
+	worker, _ := common.NewWorker(config.Conf.WorkId)
 	user.Username = register.Username
 	user.Id = worker.GetId()
 	save := common.DB.Create(&user)
