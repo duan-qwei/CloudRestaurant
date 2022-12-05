@@ -27,7 +27,6 @@ func (u *UserReq) Insert(c *gin.Context, req *request.UserAddReq) {
 	}
 
 	checkName := common.DB.Where("name=?", user.Username).Find(&user)
-
 	if checkName != nil {
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.UserNameRepeat)
 		return
@@ -125,6 +124,35 @@ func (u *UserReq) Login(c *gin.Context, req request.UserRegisterAndLogin) {
 	}
 
 	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, &user)
+	return
+}
+
+func (u *UserReq) UpdateInfoByUser(c *gin.Context, req request.UserUpdateReq) {
+	var user *model.User
+	selectOne := common.DB.First(&user, req.Id)
+	if selectOne.Error != nil {
+		log.Println(selectOne.Error.Error())
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.ERROR)
+		return
+	}
+
+	if selectOne.RowsAffected == 0 {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.DataIsNull)
+		return
+	}
+
+	user.Email = req.Email
+	user.Username = req.Username
+	user.Phone = req.Phone
+	user.Picture = req.Picture
+	update := common.DB.Model(&user).Select("username", "phone", "email", "picture").Updates(&user)
+	if err := update.Error; err != nil {
+		log.Println(err.Error())
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusInternalServerError, constant.ERROR)
+		return
+	}
+
+	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
 	return
 }
 

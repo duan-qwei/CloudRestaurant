@@ -28,5 +28,6 @@ func Router(engine *gin.Engine) {
 	{
 		userRouter.POST("/register", userController.Register)
 		userRouter.POST("/login", userController.Login)
+		userRouter.POST("/updateInfo", userController.UpdateInfoByUser)
 	}
 }

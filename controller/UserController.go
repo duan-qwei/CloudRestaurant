@@ -38,6 +38,15 @@ func (userController *UserController) Login(c *gin.Context) {
 	userService.Login(c, req)
 }
 
-func (userController *UserController) updateInfoByUser() {
+// UpdateInfoByUser 用户更新信息
+func (userController *UserController) UpdateInfoByUser(c *gin.Context) {
+	var req request.UserUpdateReq
+	err := c.ShouldBindJSON(&req)
+	if err != nil {
+		log.Println(err.Error())
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusBadRequest, constant.BindArgsError, err.Error())
+		return
+	}
 
+	userService.UpdateInfoByUser(c, req)
 }

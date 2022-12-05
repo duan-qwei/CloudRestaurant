@@ -14,6 +14,9 @@ type UserUpdateReq struct {
 	Username    string `json:"username"`
 	Password    string `json:"password"`
 	NewPassword string `json:"newPassword"`
+	Email       string `json:"email"`
+	Picture     string `json:"picture"`
+	Phone       string `json:"phone"`
 }
 
 type UserRegisterAndLogin struct {
