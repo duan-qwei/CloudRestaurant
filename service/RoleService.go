@@ -11,13 +11,14 @@ import (
 	"net/http"
 )
 
+var role = model.Role{}
+
 type RoleService struct {
 }
 
 func (s *RoleService) Add(c *gin.Context, req request.RoleAddReq) {
-	var role model.Role
 	db := common.DB.Where("name", req.Name).Find(&role)
-	if db != nil {
+	if db.Error != nil {
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SqlError)
 		return
 	}
@@ -32,7 +33,7 @@ func (s *RoleService) Add(c *gin.Context, req request.RoleAddReq) {
 	role.Name = req.Name
 
 	create := common.DB.Create(&role)
-	if create != nil {
+	if create.Error != nil {
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SqlError)
 		return
 	}
@@ -42,7 +43,6 @@ func (s *RoleService) Add(c *gin.Context, req request.RoleAddReq) {
 }
 
 func (s *RoleService) Update(c *gin.Context, req request.RoleUpdateReq) {
-	var role model.Role
 	db := common.DB.First(&role, req.Id)
 	if db.Error != nil {
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SqlError)
@@ -54,6 +54,7 @@ func (s *RoleService) Update(c *gin.Context, req request.RoleUpdateReq) {
 		return
 	}
 
+	role.Name = req.Name
 	update := common.DB.Model(&role).Select("name").Updates(&role)
 	if update.Error != nil {
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SqlError)
@@ -62,4 +63,31 @@ func (s *RoleService) Update(c *gin.Context, req request.RoleUpdateReq) {
 	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
 	return
 
+}
+
+func (s *RoleService) Delete(c *gin.Context, id int64) {
+	db := common.DB.First(&role, id)
+	if db.Error != nil {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SqlError)
+		return
+	}
+
+	delete := common.DB.Delete(&role)
+	if delete.Error != nil {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SqlError)
+		return
+	}
+	reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS)
+	return
+}
+
+func (s *RoleService) GetById(c *gin.Context, id int64) {
+	db := common.DB.First(&role, id)
+	if db.Error != nil {
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.SqlError, db.Error)
+		return
+	}
+
+	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, role)
+	return
 }

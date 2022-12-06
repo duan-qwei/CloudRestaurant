@@ -37,5 +37,7 @@ func Router(engine *gin.Engine) {
 	{
 		roleRouter.POST("/add", roleController.Add)
 		roleRouter.POST("/update", roleController.Update)
+		roleRouter.DELETE("/delete", roleController.Delete)
+		roleRouter.GET("/getById/:id", roleController.GetById)
 	}
 }
