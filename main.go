@@ -3,7 +3,6 @@ package main
 import (
 	"CloudRestaurant/common"
 	"CloudRestaurant/config"
-	"CloudRestaurant/router"
 	gin "github.com/gin-gonic/gin"
 )
 
@@ -22,7 +21,7 @@ func main() {
 	// 初始化Validator数据校验
 	common.InitValidate()
 
-	router.Router(engine)
+	Router(engine)
 
 	engine.Use()
 
