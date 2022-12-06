@@ -165,11 +165,18 @@ func (u *UserReq) GetAllUser(c *gin.Context) {
 func (u *UserReq) GetProfile(c *gin.Context, id int64) {
 	user := getOneById(c, id)
 	if user.RoleId != 0 {
-		role := roleService.GetById(c, user.RoleId)
+		var role *model.Role
+		db := common.DB.First(&role, user.RoleId)
+		if db.Error != nil {
+			reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.SqlError, db.Error)
+			return
+		}
 		if role != nil {
 			user.RoleName = role.Name
 		}
 	}
+	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, user)
+	return
 }
 
 // getOneByUsername 根据用户名获取用户

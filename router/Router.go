@@ -31,7 +31,7 @@ func Router(engine *gin.Engine) {
 		userRouter.POST("/register", userController.Register)
 		userRouter.POST("/login", userController.Login)
 		userRouter.POST("/updateInfo", userController.UpdateInfoByUser)
-		userRouter.POST("/getProfile/:id", userController.GetProfile)
+		userRouter.GET("/getProfile/:id", userController.GetProfile)
 	}
 
 	//角色
