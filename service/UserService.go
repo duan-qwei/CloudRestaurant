@@ -7,8 +7,8 @@ import (
 	"CloudRestaurant/model"
 	"CloudRestaurant/model/reponse"
 	"CloudRestaurant/model/request"
+	"CloudRestaurant/tools"
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 	"log"
 	"net/http"
@@ -91,13 +91,10 @@ func (u *UserReq) Register(c *gin.Context, register *request.UserRegisterAndLogi
 		return
 	}
 
-	//加密处理
-	hash, _ := bcrypt.GenerateFromPassword([]byte(register.Password), bcrypt.DefaultCost)
-	user.Password = string(hash)
-
-	worker, _ := common.NewWorker(config.Conf.WorkId)
+	password := tools.GeneratePassword(register.Password)
+	user.Password = password
 	user.Username = register.Username
-	user.Id = worker.GetId()
+	user.Id = tools.GenerateNextId()
 	save := common.DB.Create(&user)
 	if err := save.Error; err != nil {
 		log.Println(err.Error())
@@ -116,7 +113,7 @@ func (u *UserReq) Login(c *gin.Context, req request.UserRegisterAndLogin) {
 		return
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password))
+	_, err := tools.CheckPassword(user.Password, req.Password)
 	if err != nil {
 		log.Println(err.Error())
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.PasswordIsNotRight)
