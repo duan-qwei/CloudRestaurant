@@ -15,7 +15,6 @@ import (
 )
 
 var appConfig config.AppConfig
-var roleService RoleService
 
 type UserReq struct {
 	U *request.UserAddReq
