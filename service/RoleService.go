@@ -81,7 +81,7 @@ func (s *RoleService) Delete(c *gin.Context, id int64) {
 	return
 }
 
-func (s *RoleService) GetById(c *gin.Context, id int64) {
+func (s *RoleService) GetById(c *gin.Context, id int64) (role *model.Role) {
 	db := common.DB.First(&role, id)
 	if db.Error != nil {
 		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.SqlError, db.Error)

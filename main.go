@@ -24,6 +24,8 @@ func main() {
 
 	router.Router(engine)
 
+	engine.Use()
+
 	//监听端口
 	server := config.Conf.Server
 	engine.Run(":" + server.HttpPort)

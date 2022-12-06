@@ -5,6 +5,7 @@ import (
 	"CloudRestaurant/model/reponse"
 	"CloudRestaurant/model/request"
 	"github.com/gin-gonic/gin"
+	"github.com/unknwon/com"
 	"log"
 	"net/http"
 )
@@ -49,4 +50,14 @@ func (userController *UserController) UpdateInfoByUser(c *gin.Context) {
 	}
 
 	userService.UpdateInfoByUser(c, req)
+}
+
+func (userController *UserController) GetProfile(c *gin.Context) {
+	id := c.Param("id")
+	if id == "" {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.ArgsIsBlank)
+		return
+	}
+
+	userService.GetProfile(c, com.StrTo(id).MustInt64())
 }

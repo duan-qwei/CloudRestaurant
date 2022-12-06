@@ -12,6 +12,8 @@ type User struct {
 	Username  string `gorm:"column:username"`
 	Email     string `gorm:"column:email;default:null"`
 	Picture   string `gorm:"column:picture;default:null"`
+	RoleId    int64  `gorm:"column:role_id"`
+	RoleName  string `json:"roleName"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`

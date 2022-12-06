@@ -15,6 +15,7 @@ import (
 )
 
 var appConfig config.AppConfig
+var roleService RoleService
 
 type UserReq struct {
 	U *request.UserAddReq
@@ -156,6 +157,21 @@ func (u *UserReq) UpdateInfoByUser(c *gin.Context, req request.UserUpdateReq) {
 	return
 }
 
+func (u *UserReq) GetAllUser(c *gin.Context) {
+
+}
+
+// GetProfile 获取用户的基本信息
+func (u *UserReq) GetProfile(c *gin.Context, id int64) {
+	user := getOneById(c, id)
+	if user.RoleId != 0 {
+		role := roleService.GetById(c, user.RoleId)
+		if role != nil {
+			user.RoleName = role.Name
+		}
+	}
+}
+
 // getOneByUsername 根据用户名获取用户
 func getOneByUsername(c *gin.Context, username string) (db *gorm.DB, u *model.User) {
 	var user *model.User
@@ -166,4 +182,17 @@ func getOneByUsername(c *gin.Context, username string) (db *gorm.DB, u *model.Us
 		return
 	}
 	return db, user
+}
+
+// getOneById 根据id获取单个用户
+func getOneById(c *gin.Context, id int64) (u *model.User) {
+	var user *model.User
+	db := common.DB.First(&user, id)
+	if error := db.Error; error != nil {
+		log.Println(error.Error())
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusInternalServerError, constant.SqlError)
+		return
+	}
+
+	return user
 }

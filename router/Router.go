@@ -22,6 +22,7 @@ func Router(engine *gin.Engine) {
 		adminRouter.DELETE("/delete/:id", userManageController.DeleteUserById)
 		adminRouter.POST("/update", userManageController.Update)
 		adminRouter.GET("/getInfo", userManageController.GetUerInfoById)
+		adminRouter.GET("/getAllUser", userManageController.GetAllUser)
 	}
 
 	//用户前台
@@ -30,6 +31,7 @@ func Router(engine *gin.Engine) {
 		userRouter.POST("/register", userController.Register)
 		userRouter.POST("/login", userController.Login)
 		userRouter.POST("/updateInfo", userController.UpdateInfoByUser)
+		userRouter.POST("/getProfile/:id", userController.GetProfile)
 	}
 
 	//角色

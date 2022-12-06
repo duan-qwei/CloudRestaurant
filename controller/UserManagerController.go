@@ -64,3 +64,7 @@ func (UserManagerController *UserManagerController) Update(c *gin.Context) {
 	}
 	userService.Update(c, req)
 }
+
+func (UserManagerController *UserManagerController) GetAllUser(c *gin.Context) {
+	userService.GetAllUser(c)
+}
