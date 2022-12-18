@@ -20,12 +20,13 @@ type User struct {
 }
 
 type UserLogin struct {
-	Id       int64
-	Phone    string
-	Username string
-	Email    string
-	Picture  string
-	RoleId   int64
-	RoleName string
-	Points   int32
+	Id       int64  `json:"id"`
+	Phone    string `json:"phone"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Picture  string `json:"picture"`
+	RoleId   int64  `json:"roleId"`
+	RoleName string `json:"roleName"`
+	Points   int32  `json:"points"`
+	Token    string `json:"token"`
 }

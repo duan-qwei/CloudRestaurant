@@ -140,7 +140,7 @@ func (u *UserReq) Login(c *gin.Context, req request.UserRegisterAndLogin) {
 		userLogin.RoleName = role.Name
 	}
 
-	point, err := pointService.getPointsByUserId(c, user.Id)
+	point, err := pointService.getPointsByUserId(user.Id)
 	if err != nil {
 		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.PasswordIsNotRight)
 		return
@@ -149,6 +149,13 @@ func (u *UserReq) Login(c *gin.Context, req request.UserRegisterAndLogin) {
 		userLogin.Points = point.Points
 	}
 
+	token, err := tools.GenerateToken(user.Id, user.Username)
+	if err != nil {
+		reponse.ResponseErrorReturn(c, http.StatusOK, http.StatusOK, constant.TokenError, err.Error())
+		return
+	}
+
+	userLogin.Token = token
 	toStr, _ := json.Marshal(userLogin)
 	common.RedisClient.Set(com.StrTo(userLogin.Id).String(), toStr, time.Second*100)
 	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, &userLogin)

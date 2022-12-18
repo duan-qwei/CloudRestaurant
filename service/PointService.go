@@ -36,7 +36,7 @@ func (pointService *PointService) add(c *gin.Context, userId int64, points int32
 	return nil
 }
 
-func (pointService *PointService) getPointsByUserId(c *gin.Context, userId int64) (point *model.Point, error error) {
+func (pointService *PointService) getPointsByUserId(userId int64) (point *model.Point, error error) {
 	db := common.DB.Where("user_id=?", userId).Find(&point)
 	if db.Error != nil {
 		return nil, db.Error

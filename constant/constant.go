@@ -12,4 +12,6 @@ const (
 	DataExist          = "当前数据已存在！"
 	PasswordIsNotRight = "密码错误！"
 	SqlError           = "数据库操作异常！"
+
+	TokenError = "生成token异常"
 )
