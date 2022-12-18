@@ -56,5 +56,7 @@ func (role *RoleController) GetById(c *gin.Context) {
 		return
 	}
 
-	roleService.GetById(c, com.StrTo(id).MustInt64())
+	selectById := roleService.GetById(c, com.StrTo(id).MustInt64())
+	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, selectById)
+	return
 }

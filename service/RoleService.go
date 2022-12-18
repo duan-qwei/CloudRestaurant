@@ -88,6 +88,10 @@ func (s *RoleService) GetById(c *gin.Context, id int64) (role *model.Role) {
 		return
 	}
 
-	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, role)
-	return
+	if db.RowsAffected == 0 {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.DataIsNull)
+		return
+	}
+
+	return role
 }

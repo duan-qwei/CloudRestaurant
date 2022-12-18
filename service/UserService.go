@@ -8,13 +8,19 @@ import (
 	"CloudRestaurant/model/reponse"
 	"CloudRestaurant/model/request"
 	"CloudRestaurant/tools"
+	"encoding/json"
 	"github.com/gin-gonic/gin"
+	"github.com/unknwon/com"
 	"gorm.io/gorm"
 	"log"
 	"net/http"
+	"time"
 )
 
-var appConfig config.AppConfig
+var (
+	appConfig   config.AppConfig
+	roleService RoleService
+)
 
 type UserReq struct {
 	U *request.UserAddReq
@@ -91,8 +97,7 @@ func (u *UserReq) Register(c *gin.Context, register *request.UserRegisterAndLogi
 		return
 	}
 
-	password := tools.GeneratePassword(register.Password)
-	user.Password = password
+	user.Password = tools.GeneratePassword(register.Password)
 	user.Username = register.Username
 	user.Id = tools.GenerateNextId()
 	save := common.DB.Create(&user)
@@ -120,7 +125,23 @@ func (u *UserReq) Login(c *gin.Context, req request.UserRegisterAndLogin) {
 		return
 	}
 
-	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, &user)
+	userLogin := model.UserLogin{
+		Id:       user.Id,
+		Phone:    user.Phone,
+		Username: user.Username,
+		Email:    user.Email,
+		Picture:  user.Picture,
+		RoleId:   user.RoleId,
+	}
+
+	if userLogin.RoleId != 0 {
+		role := roleService.GetById(c, userLogin.RoleId)
+		userLogin.RoleName = role.Name
+	}
+
+	toStr, _ := json.Marshal(userLogin)
+	common.RedisClient.Set(com.StrTo(userLogin.Id).String(), toStr, time.Second*100)
+	reponse.ResponseReturn(c, http.StatusOK, http.StatusOK, constant.SUCCESS, &userLogin)
 	return
 }
 

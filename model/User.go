@@ -18,3 +18,13 @@ type User struct {
 	UpdatedAt time.Time
 	DeletedAt gorm.DeletedAt `gorm:"index"`
 }
+
+type UserLogin struct {
+	Id       int64
+	Phone    string
+	Username string
+	Email    string
+	Picture  string
+	RoleId   int64
+	RoleName string
+}
