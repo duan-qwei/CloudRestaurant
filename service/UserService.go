@@ -18,8 +18,9 @@ import (
 )
 
 var (
-	appConfig   config.AppConfig
-	roleService RoleService
+	appConfig    config.AppConfig
+	roleService  RoleService
+	pointService PointService
 )
 
 type UserReq struct {
@@ -137,6 +138,15 @@ func (u *UserReq) Login(c *gin.Context, req request.UserRegisterAndLogin) {
 	if userLogin.RoleId != 0 {
 		role := roleService.GetById(c, userLogin.RoleId)
 		userLogin.RoleName = role.Name
+	}
+
+	point, err := pointService.getPointsByUserId(c, user.Id)
+	if err != nil {
+		reponse.ResponseMessageReturn(c, http.StatusOK, http.StatusOK, constant.PasswordIsNotRight)
+		return
+	}
+	if point != nil {
+		userLogin.Points = point.Points
 	}
 
 	toStr, _ := json.Marshal(userLogin)

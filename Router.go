@@ -42,4 +42,10 @@ func Router(engine *gin.Engine) {
 		roleRouter.DELETE("/delete", roleController.Delete)
 		roleRouter.GET("/getById/:id", roleController.GetById)
 	}
+
+	//积分
+	pointRouter := engine.Group("/point")
+	{
+		pointRouter.GET("/add")
+	}
 }

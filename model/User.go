@@ -27,4 +27,5 @@ type UserLogin struct {
 	Picture  string
 	RoleId   int64
 	RoleName string
+	Points   int32
 }
